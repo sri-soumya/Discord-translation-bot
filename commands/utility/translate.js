@@ -1,5 +1,8 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { categories } = require("../../utils/supported-languages");
+const {
+  sourceCategories,
+  targetCategories,
+} = require("../../utils/supported-languages");
 const { translateLanguage } = require("../../utils/translate-api");
 
 let data = new SlashCommandBuilder()
@@ -34,11 +37,18 @@ async function execute(interaction) {
 }
 
 async function autocomplete(interaction) {
-  const focusedValue = interaction.options.getFocused();
-  const filtered = categories.filter((choice) =>
-    choice.name.toLowerCase().startsWith(focusedValue.toLowerCase())
-  );
-  await interaction.respond(filtered.splice(0, 25));
+  const focusedOption = interaction.options.getFocused(true);
+  if (focusedOption.name === "from") {
+    const filtered = sourceCategories.filter((choice) =>
+      choice.name.toLowerCase().startsWith(focusedOption.value.toLowerCase())
+    );
+    await interaction.respond(filtered.splice(0, 25));
+  } else {
+    const filtered = targetCategories.filter((choice) =>
+      choice.name.toLowerCase().startsWith(focusedOption.value.toLowerCase())
+    );
+    await interaction.respond(filtered.splice(0, 25));
+  }
 }
 module.exports = {
   data,

@@ -50,7 +50,6 @@ async function regsiterCommand(client) {
   })();
 
   client.on(Events.InteractionCreate, async (interaction) => {
-    //else if (!interaction.isChatInputCommand()) return;
     if (interaction.isAutocomplete()) {
       const command = interaction.client.commands.get(interaction.commandName);
 
